@@ -1,0 +1,45 @@
+body{
+    padding: 0;
+    margin: 0;
+    background-color: rgb(28, 29, 38);
+}
+.Title{
+    background-color: #f2ccff; 
+    text-align: center;
+    font-family: 'Chakra Petch';font-size: 14px;
+    user-select: none;
+}
+.Tutorial{
+    position: relative;
+    background-color:#f2ccff;
+    border: #000000;
+    border-radius: 10px; 
+    text-align: center;
+    font-family: 'Helvetica';font-size: 16px;
+    margin: auto;
+    width: 500px;
+    height: 400px;
+    z-index: 3; 
+    padding: 5px 50px 5px 50px;
+    display: none;
+}
+.Button{
+    position: absolute;
+    bottom:10px;
+    background-color:#50fa7b;
+    border:2px solid #282a36;
+    border-radius: 10px;
+    height:40px;
+    width:75px;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+}
+.Button:hover{
+    background-color: #282a36;
+    border:2px solid #50fa7b;
+    color:#50fa7b;
+}
+p{
+    font-size:16px;
+}

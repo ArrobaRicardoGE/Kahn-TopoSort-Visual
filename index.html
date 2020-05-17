@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href='https://fonts.googleapis.com/css?family=Chakra Petch' rel='stylesheet'>
+        <script>
+            MathJax = {
+              tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
+            };
+        </script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+        <link rel="stylesheet" href="public/style.css"></link>
+        <link rel="icon" href="public/assets/favicon.png">
+        <title>TopoSort</title>
+        <script src="p5/p5.js"></script>
+    </head>
+    <body>
+        <div class=Title>
+            <h2>Orden Topológico: Algoritmo de Kahn</h2>
+        </div>
+        <div class=Tutorial id="Tutorial_1" style="display:block;">
+            <h2>Tutorial</h2>
+            <p>
+                El Orden Topológico de una <a href="https://es.wikipedia.org/wiki/Grafo_ac%C3%ADclico_dirigido">Gráfica Acíclica Dirigida</a> ($DAG$) es un ordenamiento lineal de sus vértices
+                de tal forma que el vértice $u$ va antes que vértice $v$ si la arista $u \rightarrow v$ existe en el $DAG$.
+            </p>
+                Un $DAG$ tiene al menos uno y posiblemente más Ordenamientos Topológicos.
+            <p>
+    
+            </p>
+            <img src="public/assets/1.png" width=495 height=200>
+            <p style="font-size:12px;position:absolute;bottom:5px;left:50%;">$1/6$</p>
+            <button id="ant1" class=Button style="left:10px;">Saltar</button>
+            <button id="sig1" class=Button style="right:10px;">Siguiente</button>
+        </div>
+
+        <div class=Tutorial id="Tutorial_2">
+            <h2>Tutorial</h2>
+            <p>
+                Una forma simple de pensar en el Ordenamiento topológico es con el siguiente problema:
+            </p>
+            <p>
+                En una fábrica existen $n$ diferentes tareas que se tienen que llevar a cabo, sin embargo, hay algunas tareas
+                que necesitan que se completen otras tareas antes de poder llevarlas a cabo. De igual manera, el jefe de la
+                empresa prefiere que se lleven a cabo las tareas más importantes primero (la tarea $i$ es más importante que
+                la tarea $j$ si $i > j$). Si se conocen los requisitos para cada tarea, da algún orden en el que se pueden 
+                llevar a cabo las $n$ tareas respetando dichos requisitos y la preferencia del jefe. 
+            </p>
+            <img src="public/assets/2.png" width=347 height=80>
+            <p style="font-size:12px;position:absolute;bottom:5px;left:50%;">$2/6$</p>
+            <button id="ant2" class=Button style="left:10px;">Anterior</button>
+            <button id="sig2" class=Button style="right:10px;">Siguiente</button>
+        </div>
+
+        <div class=Tutorial id="Tutorial_3">
+            <h2>Tutorial</h2>
+            <p>
+                Si modelamos las tareas como un $DAG$, establecemos que existe la arista  $u \rightarrow v$ si $u$ es requisito
+                de $v$.
+            </p>
+            <p>
+                De esta manera queda claro que el orden solicitado es el orden topológico del $DAG$ generado. 
+            </p>
+            <img src="public/assets/3.png" width=439 height=200>
+            <p style="font-size:12px;position:absolute;bottom:5px;left:50%;">$3/6$</p>
+            <button id="ant3" class=Button style="left:10px;">Anterior</button>
+            <button id="sig3" class=Button style="right:10px;">Siguiente</button>
+        </div>
+
+        <div class=Tutorial id="Tutorial_4">
+            <h2>Tutorial</h2>
+            <p>
+                Hay varias formas de obtener el Orden Topológico de un $DAG$, pero el algoritmo que visualizamos en esta
+                herramienta es el algoritmo de Kahn. Este algoritmo se basa en el grado de entrada de cada vértice (cuantas
+                aristas apuntan al nodo), cuyo equivalente en el problema que planteamos sería la cantidad de requisitos
+                de cada tarea.
+            </p>
+            <p>
+                Empezamos con los vértices cuyo grado de entrada es $0$ (o aquellas tareas que no tienen requisitos) y los 
+                insertamos a alguna <b>estructura de datos</b>. Mientras nuestra estructura de datos no esté vacía, removeremos
+                alguno de ellos y quitaremos todos las aristas que salen de ese vértice (eliminaremos esa tarea de nuestra lista
+                de requisitos).
+            </p>
+            <img src="public/assets/4.png" width=219 height=100>
+            <p style="font-size:12px;position:absolute;bottom:5px;left:50%;">$4/6$</p>
+            <button id="ant4" class=Button style="left:10px;">Anterior</button>
+            <button id="sig4"class=Button style="right:10px;">Siguiente</button>
+        </div>
+
+        <div class=Tutorial id="Tutorial_5">
+            <h2>Tutorial</h2>
+            <p>
+                La estructura de datos empleada puede variar dependiendo del problema. Como en este problema requerimos encontrar
+                el orden topólogico que dé prioridad a las tareas con índice mayor, empleamos un <b>heap (montículo)</b>, que nos ayuda a siempre procesar
+                el vértice de mayor valor primero.
+            </p>
+            <p>
+                Cabe destacar que a la hora de hacer el Ordenamiento Topológico si el grafo dado no es un $DAG$, no se completará el 
+                proceso.
+            </p>
+            <p>
+                La complejidad del algoritmo varía según la estructura de datos que se emplee y de la forma de representar el
+                $DAG$. Utilizando un <b>heap</b> tenemos una complejidad de $O((V+E)log(V))$, donde $V$ es la cantidad de vértices
+                y $E$ la cantidad de aristas.
+            </p>
+            <!--Imagen de ejemplo-->
+            <p style="font-size:12px;position:absolute;bottom:5px;left:50%;">$5/6$</p>
+            <button id="ant5" class=Button style="left:10px;">Anterior</button>
+            <button id="sig5" class=Button style="right:10px;">Siguiente</button>
+        </div>
+
+        <div class=Tutorial id="Tutorial_6">
+            <h2>Tutorial</h2>
+            <p>
+                Para usar este visualizador, primero hay que modelar el grafo seleccionando los requisitos de cada tarea. Cuando
+                estés listo, presiona <b>"Iniciar"</b> o pulsa la barra espaciadora. 
+            </p>
+            <p>
+                Puedes ajustar el tiempo de delay con las flechas del teclado. Un tiempo de delay mayor significa una velocidad
+                de visualización menor.
+            </p>
+            <p>
+                Si quieres volver a intentarlo, presiona el botón de <b>"Resetear"</b> o pulsa la tecla <b>R</b>.
+            </p>
+            <p>
+                Para conocer más sobre este algoritmo, te recomiendo visitar este <a href="https://www.geeksforgeeks.org/topological-sorting-indegree-based-solution/">sitio</a>. ¡Diviértete!
+            </p>
+            <!--Imagen de ejemplo-->
+            <p style="font-size:12px;position:absolute;bottom:5px;left:50%;">$6/6$</p>
+            <button id="ant6" class=Button style="left:10px;">Anterior</button>
+            <button id="sig6" class=Button style="right:10px;">Cerrar</button>
+        </div>
+        <script src="public/classes/Graph.js"></script>
+        <script src="public/classes/Row.js"></script>
+        <script src="public/classes/Table.js"></script>
+        <script src="public/classes/Heap.js"></script>
+        <script src="public/classes/Answer.js"></script>
+        <script src="public/classes/Button.js"></script>
+        <script src="sketch.js"></script>
+    </body>
+</html>
