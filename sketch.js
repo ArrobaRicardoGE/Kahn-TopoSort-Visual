@@ -27,11 +27,12 @@ let invTable = new Table(15,60,10,22,new Color(255,45,45));
 let ans = new Answer(320,500,25,40,new Color(206, 108, 255));
 let b1 = new Button("Resetear",1000-85,600-50,50,20,new Color(0,0,0));
 let b2 = new Button("Iniciar",1000-85,600-75,50,20,new Color(0,0,0));
+let b3 = new Button("Aleatorio",55,600-60,50,20,new Color(0,0,0));
 let delayDown = new Button("-",1000-115,600-30,20,20,new Color(0,0,0));
 let delayUp = new Button("+",1000-25,600-30,20,20,new Color(0,0,0));
 let delay = 100;
 let usa = new Map();
-let proc = false,done = false;
+let proc = true,done = false;
 
 function reset(){
     table.clear();
@@ -62,13 +63,14 @@ function draw(){
     ans.showOutline(table.rows.length);
     b1.show();
     b2.show();
+    b3.show();
     delayUp.show();
     delayDown.show();
     fill(255);
     textSize(10);
     text(("Delay (ms): "+delay),1000-60,600-20);
     if(table.inside() && !done)cursor(HAND);
-    else if(b1.inside() || b2.inside() || delayUp.inside() || delayDown.inside())cursor(HAND);
+    else if(b1.inside() || b2.inside() || delayUp.inside() || delayDown.inside() || b3.inside())cursor(HAND);
     else cursor(ARROW);
     if(!proc && !done)table.mouseOver();
 }
@@ -77,6 +79,7 @@ function mousePressed(){
     if(delayUp.inside())delay+=10;
     if(delayDown.inside())delay-=10;
     if(b1.inside() && !proc)reset();
+    if(b3.inside() && !proc)randomGraph();
     if(!done){
         if(!proc){
             table.isPressed();
@@ -92,9 +95,43 @@ function mousePressed(){
 function keyPressed(){
     if(keyCode==UP_ARROW)delay+=10;
     else if(keyCode==DOWN_ARROW)delay-=10;
-    else if(keyCode==32 && !proc)Toposort();
+    else if(keyCode==32 && !proc && !done)Toposort();
     else if(keyCode==82 && !proc)reset();
+    else if(keyCode==87 && !proc)randomGraph();
     delay=Math.max(delay,10);
+}
+
+function randomGraph(){
+    reset();
+    let nvertex = Math.round(Math.random()*13)+7;
+    while(nvertex>0){
+        let x = Math.round(Math.random()*9);
+        let y = Math.round(Math.random()*9);
+        if(x!=y){
+            table.rows[x].arr[y].selected=true;
+            table.rows[x].arr[y].col=new Color(80, 250, 123);
+            invTable.rows[x].arr[y].selected=true;
+            usa.clear();
+            if(validEdge(y)==1)nvertex--;
+            else{
+                table.rows[x].arr[y].selected=false;
+                table.rows[x].arr[y].col=table.rows[x].col;
+                invTable.rows[x].arr[y].selected=false;
+            }
+        }
+    }
+}
+
+function validEdge(v){
+    usa.set(v,true);
+    let r=1;
+    for(let i=0;i<table.rows.length;i++){
+        if(table.rows[i].arr[v].selected==true){
+            if(usa.get(i)==true)return 0;
+            r*=validEdge(i);
+        }
+    }
+    return r;
 }
 
 async function Toposort(){
@@ -154,6 +191,7 @@ function sleep(ms) {
 //Tutorial
 document.getElementById("ant1").addEventListener("click",function(){
     document.getElementById("Tutorial_1").style.display = "none";
+    proc = false;
 });
 document.getElementById("sig1").addEventListener("click",function(){
     document.getElementById("Tutorial_1").style.display = "none";
@@ -165,6 +203,7 @@ document.getElementById("ant6").addEventListener("click",function(){
 });
 document.getElementById("sig6").addEventListener("click",function(){
     document.getElementById("Tutorial_6").style.display = "none";
+    proc = false;
 });
 
 for(let i=2;i<=5;i++){
