@@ -1,9 +1,7 @@
 /*
-    Pending tasks: 
-    Details: 
-        
+    Visualizador del Algoritmo de Kahn para el Orden Toplógico
+    https://github.com/ArrobaRicardoGE/Kahn-TopoSort-Visual
 */
-
 let cnv;
 
 function setup(){
@@ -25,14 +23,16 @@ let pq = new Heap(500,300,25,150,new Color(241, 250, 140),new Color(80, 250, 123
 let table = new Table(15,60,10,22,new Color(95, 150, 227));
 let invTable = new Table(15,60,10,22,new Color(255,45,45));
 let ans = new Answer(320,500,25,40,new Color(206, 108, 255));
-let b1 = new Button("Resetear",1000-85,600-50,50,20,new Color(0,0,0));
+let b1 = new Button("Resetear",55,600-35,50,20,new Color(0,0,0));
 let b2 = new Button("Iniciar",1000-85,600-75,50,20,new Color(0,0,0));
 let b3 = new Button("Aleatorio",55,600-60,50,20,new Color(0,0,0));
-let delayDown = new Button("-",1000-115,600-30,20,20,new Color(0,0,0));
-let delayUp = new Button("+",1000-25,600-30,20,20,new Color(0,0,0));
+let b4 = new Button("Manual",1000-95,600-25,50,20,new Color(0,0,0));
+let nxtb = new Button(">",1000-35,600-25,20,20,new Color(0,0,0))
+let delayDown = new Button("-",1000-115,600-50,20,20,new Color(0,0,0));
+let delayUp = new Button("+",1000-25,600-50,20,20,new Color(0,0,0));
 let delay = 100;
 let usa = new Map();
-let proc = true,done = false;
+let proc = true,done = false,rightArr=false,manual=0;
 
 function reset(){
     table.clear();
@@ -51,7 +51,7 @@ function draw(){
     textSize(20);
     fill(255);
     text("Matriz de adyacencia",(table.posX+(table.rows.length+2)*table.cellSize)/2+14,table.posY-table.cellSize-10);
-    text("Heap",pq.posX,pq.posY-pq.r-10);
+    text("Montículo",pq.posX,pq.posY-pq.r-10);
     text("Gráfica",graph1.posX,table.posY-table.cellSize-5);
     text("Orden topológico",500,ans.posY-ans.r-10);
     table.show();
@@ -64,13 +64,15 @@ function draw(){
     b1.show();
     b2.show();
     b3.show();
+    b4.show();
     delayUp.show();
     delayDown.show();
+    nxtb.show();
     fill(255);
     textSize(10);
-    text(("Delay (ms): "+delay),1000-60,600-20);
+    text(("Delay (ms): "+delay),1000-60,600-40);
     if(table.inside() && !done)cursor(HAND);
-    else if(b1.inside() || b2.inside() || delayUp.inside() || delayDown.inside() || b3.inside())cursor(HAND);
+    else if(b1.inside() || b2.inside() || delayUp.inside() || delayDown.inside() || b3.inside() || nxtb.inside() || b4.inside())cursor(HAND);
     else cursor(ARROW);
     if(!proc && !done)table.mouseOver();
 }
@@ -78,24 +80,47 @@ function draw(){
 function mousePressed(){
     if(delayUp.inside())delay+=10;
     if(delayDown.inside())delay-=10;
+    if(nxtb.inside())rightArr=true;
+    if(b4.inside()){
+        manual=1-manual;
+        if(manual==0){
+            rightArr=true;
+            b4.col = new Color(0,0,0);
+        }
+        else b4.col = new Color(114, 94, 255);
+    }
     if(b1.inside() && !proc)reset();
     if(b3.inside() && !proc)randomGraph();
     if(!done){
         if(!proc){
             table.isPressed();
             invTable.isPressed();
-            if(b2.inside() && !proc)Toposort();
+            if(b2.inside() && !proc){
+                Toposort();
+                b2.col = new Color(114, 94, 255);
+            }
         }
     }
     else window.alert('Terminado! Para probar otra simulación presiona "Resetear"');
-    console.log(mouseX,mouseY);
     delay=Math.max(delay,10);
 }
 
 function keyPressed(){
-    if(keyCode==UP_ARROW)delay+=10;
+    if(keyCode==77){
+        manual=1-manual;
+        if(manual==0){
+            rightArr=true;
+            b4.col = new Color(0,0,0);
+        }
+        else b4.col = new Color(114, 94, 255)
+    }
+    else if(keyCode==RIGHT_ARROW)rightArr=true;
+    else if(keyCode==UP_ARROW)delay+=10;
     else if(keyCode==DOWN_ARROW)delay-=10;
-    else if(keyCode==32 && !proc && !done)Toposort();
+    else if(keyCode==32 && !proc && !done){
+        Toposort();
+        b2.col = new Color(114, 94, 255);
+    }
     else if(keyCode==82 && !proc)reset();
     else if(keyCode==87 && !proc)randomGraph();
     delay=Math.max(delay,10);
@@ -140,6 +165,7 @@ async function Toposort(){
     for(let i=0;i<table.rows.length;i++){
         table.highlightX(i,new Color(255,255,255));
         await sleep(delay);
+        //await sleep(delay);
         if(table.rows[i].selection.length==0){
             pq.insert(i+1);
             await sleep(delay);
@@ -178,14 +204,29 @@ async function Toposort(){
         await sleep(delay);
         table.highlightY(v,new Color(0,0,0));
     }
-    if(ans.arr.length!=table.rows.length)window.alert('Oops, algo salió mal. Parece que la entrada indicada no es un Grafo Acíclico Dirigido. Verifícala y vuelve a intentarlo');
+    if(ans.arr.length!=table.rows.length)window.alert('Oops, algo salió mal. Parece que la entrada indicada no es un Grafo Acíclico Dirigido. Verifícala y vuelve a intentarlo. Recuerda que puedes usar una entrada generada de manera aleatoria.');
     proc = false;
     done = true;
+    b2.col = new Color(0,0,0);
     window.alert('Terminado! Para probar otra simulación presiona "Reset"');
 }
 
 function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    if(manual==1){
+        return new Promise(resolve => {
+            function checkF(){
+                if(rightArr==true){
+                    rightArr=false;
+                    resolve();
+                }
+                else{
+                    window.setTimeout(checkF,100);
+                }
+            }
+            checkF();
+        });
+    }
+    else return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 //Tutorial

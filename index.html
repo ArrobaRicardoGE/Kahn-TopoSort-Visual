@@ -12,7 +12,7 @@
         <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
         <link rel="stylesheet" href="public/style.css"></link>
         <link rel="icon" href="public/assets/favicon.png">
-        <title>TopoSort</title>
+        <title>Orden Topológico: Algoritmo de Kahn</title>
         <script src="p5/p5.js"></script>
     </head>
     <body>
@@ -22,7 +22,7 @@
         <div class=Tutorial id="Tutorial_1" style="display:block;">
             <h2>Tutorial</h2>
             <p>
-                El Orden Topológico de una <a href="https://es.wikipedia.org/wiki/Grafo_ac%C3%ADclico_dirigido">Gráfica Acíclica Dirigida</a> ($DAG$) es un ordenamiento lineal de sus vértices
+                El Orden Topológico de una <a href="https://es.wikipedia.org/wiki/Grafo_ac%C3%ADclico_dirigido" target = "_blank" rel="noopener noreferrer">Gráfica Acíclica Dirigida</a> ($DAG$) es un ordenamiento lineal de sus vértices
                 de tal forma que el vértice $u$ va antes que vértice $v$ si la arista $u \rightarrow v$ existe en el $DAG$.
             </p>
                 Un $DAG$ tiene al menos uno y posiblemente más Ordenamientos Topológicos.
@@ -38,14 +38,13 @@
         <div class=Tutorial id="Tutorial_2">
             <h2>Tutorial</h2>
             <p>
-                Una forma simple de pensar en el Ordenamiento topológico es con el siguiente problema:
-            </p>
-            <p>
-                En una fábrica existen $n$ diferentes tareas que se tienen que llevar a cabo, sin embargo, hay algunas tareas
-                que necesitan que se completen otras tareas antes de poder llevarlas a cabo. De igual manera, el jefe de la
-                empresa prefiere que se lleven a cabo las tareas más importantes primero (la tarea $i$ es más importante que
-                la tarea $j$ si $i > j$). Si se conocen los requisitos para cada tarea, da algún orden en el que se pueden 
-                llevar a cabo las $n$ tareas respetando dichos requisitos y la preferencia del jefe. 
+                Una forma simple de pensar en el Ordenamiento topológico es con el siguiente problema:<br>
+                En una fábrica existen $n$ diferentes tareas que se tienen que llevar a cabo, sin embargo, hay algunas tareas 
+                que tienen una serie de tareas requisito que se tienen que completar antes de poder ejecutarlas. Las tareas 
+                están numeradas del $1$ al $n$, y al jefe de la fábrica le interesa que se les dé prioridad a las tareas que son 
+                más importantes, (la tarea $i$ es más importante que la tarea $j$  si $i>j$ ). Si se conocen los requisitos para cada 
+                tarea, da algún orden en el que se pueden llevar a cabo las tareas respetando los requisitos de cada una y la 
+                preferencia del jefe.
             </p>
             <img src="public/assets/2.png" width=347 height=80>
             <p style="font-size:12px;position:absolute;bottom:5px;left:50%;">$2/6$</p>
@@ -92,8 +91,9 @@
             <h2>Tutorial</h2>
             <p>
                 La estructura de datos empleada puede variar dependiendo del problema. Como en este problema requerimos encontrar
-                el orden topólogico que dé prioridad a las tareas con índice mayor, empleamos un <b>heap (montículo)</b>, que nos ayuda a siempre procesar
-                el vértice de mayor valor primero.
+                el orden topólogico que dé prioridad a las tareas con índice mayor, empleamos un 
+                <a href="https://es.wikipedia.org/wiki/Mont%C3%ADculo_(inform%C3%A1tica)" target = "_blank" rel="noopener noreferrer">montículo</a>, 
+                que nos ayuda a siempre procesar el vértice de mayor valor primero.
             </p>
             <p>
                 Cabe destacar que a la hora de hacer el Ordenamiento Topológico si el grafo dado no es un $DAG$, no se completará el 
@@ -101,7 +101,7 @@
             </p>
             <p>
                 La complejidad del algoritmo varía según la estructura de datos que se emplee y de la forma de representar el
-                $DAG$. Utilizando un <b>heap</b> tenemos una complejidad de $O((V+E)log(V))$, donde $V$ es la cantidad de vértices
+                $DAG$. Utilizando un <b>montículo</b> tenemos una complejidad de $O((V+E)log(V))$, donde $V$ es la cantidad de vértices
                 y $E$ la cantidad de aristas.
             </p>
             <!--Imagen de ejemplo-->
@@ -114,21 +114,18 @@
             <h2>Tutorial</h2>
             <p>
                 Para usar este visualizador, primero hay que modelar el grafo seleccionando los requisitos de cada tarea. Cuando
-                estés listo, presiona <b>"Iniciar"</b> o pulsa la barra espaciadora. 
+                estés listo, presiona <b>"Iniciar"</b> o pulsa la <b>barra espaciadora</b>.<br> Para probar con una entrada aleatoria presiona el botón <b>"Aleatorio"</b> o pulsa la tecla <b>W</b>. (Gracias a
+                Luis Eduardo Robles por la sugerencia)
             </p>
             <p>
-                Puedes ajustar el tiempo de delay con las flechas del teclado. Un tiempo de delay mayor significa una velocidad
-                de visualización menor.
+                Puedes ajustar el tiempo de delay con las flechas de <b>arriba</b> y <b>abajo</b> del teclado. También puedes utilizar el modo manual, presionando el botón <b>"Manual"</b> o pulsando 
+                la tecla <b>M</b>. Mientras estés en este modo, puedes avanzar con la <b>flecha derecha</b> o con el botón <b>">"</b>. 
             </p>
             <p>
                 Si quieres volver a intentarlo, presiona el botón de <b>"Resetear"</b> o pulsa la tecla <b>R</b>.
             </p>
             <p>
-                Para probar con una entrada aleatoria presiona el botón <b>"Aleatorio"</b> o pulsa la tecla <b>W</b>. (Gracias a
-                Luis Eduardo Robles por la sugerencia)
-            </p>
-            <p>
-                Para conocer más sobre este algoritmo, te recomiendo visitar este <a href="https://www.geeksforgeeks.org/topological-sorting-indegree-based-solution/">sitio</a>. ¡Diviértete!
+                Para conocer más sobre el algoritmo y el visualizador, visita el <a href="https://github.com/ArrobaRicardoGE/Kahn-TopoSort-Visual" target = "_blank" rel="noopener noreferrer">repositorio</a> del proyecto. ¡Diviértete!
             </p>
             <!--Imagen de ejemplo-->
             <p style="font-size:12px;position:absolute;bottom:5px;left:50%;">$6/6$</p>
